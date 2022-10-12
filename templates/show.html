@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='star.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='show.css') }}">
+    
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.10.0/mapbox-gl.css' rel='stylesheet' />
+
+<!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+  rel="stylesheet"
+/>     
+   
+</head>
+<body>
+    
+    
+    {%include "navbar.html"%}
+<div class="mt-5 ms-5">
+    <div class="row ">
+        <div class="col-6">
+            {%for campgroundview in campgroundview %}
+            <style>
+                body{
+                    
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url("{{url_for('static',filename = 'uploads/'+ campgroundview.image)}}");
+                }
+            </style>
+            <img src="{{url_for('static',filename = 'uploads/'+ campgroundview.image)}}" height="300" width="300" class="card-img-top" alt="...">
+           
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{campgroundview.title}}</h5>
+                    <p class="card-text">{{campgroundview.description}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                   <li class="list-group-item  text-danger"> <span class="text-dark">LOCATION : </span>{{campgroundview.location}}</li>
+                    <!-- <li class="list-group-item">Submitted by campground.author.username}}</li> -->
+                    <li class="list-group-item">${{campgroundview.price}}/Per day</li>
+                    <li class="list-group-item">{{campgroundview.mobile}}</li>
+                    <li class="list-group-item">{{campgroundview.email}}</li>
+                </ul>
+              
+                <div class="card-body">
+                    <a class="card-link btn btn-info" href="/campgrounds/{{campgroundview.id}}/edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M11.013 1.427a1.75 1.75 0 012.474 0l1.086 1.086a1.75 1.75 0 010 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 01-.927-.928l.929-3.25a1.75 1.75 0 01.445-.758l8.61-8.61zm1.414 1.06a.25.25 0 00-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 000-.354l-1.086-1.086zM11.189 6.25L9.75 4.81l-6.286 6.287a.25.25 0 00-.064.108l-.558 1.953 1.953-.558a.249.249 0 00.108-.064l6.286-6.286z">
+                        </path></svg> Edit</a>
+                    <a class="card-link btn btn-danger" name="Delete" href="/campgrounds/{{campgroundview.id}}/delete">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z">
+                            </path></svg> Delete</a>
+                   
+                </div>
+               
+                <div class="card-footer text-muted">
+                    2 days ago
+                </div>
+            </div>
+            {%endfor%}
+            <div class="card mt-3 mb-3 ms-3 me-3">
+                <div class="card-body">
+                    <h2 class="card-title">Amenities</h2>
+                      
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-0840b013-efd5-489d-83ec-aecfabff3041.webp" width="24px" height="24px" alt=""><span class="ps-2">Pet Friendly</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-c14e2c23-4831-41cb-a732-e4e3971197eb.webp" width="24px" height="24px" alt=""><span class="ps-2">Phone Network</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-a2d3d411-64ad-4aeb-9d65-f46c859702d6.webp" width="24px" height="24px" alt=""><span class="ps-2">Picnic Table</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-bc33d6b6-11f9-4124-8bc7-425b63f30526.webp" width="24px" height="24px" alt=""><span class="ps-2">Drinking Water</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-3080fa7e-6948-496a-867b-64abfa0cac78.webp" width="24px" height="24px" alt=""><span class="ps-2">BBQ Grill Chargeable</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-7d77c071-94c3-4c8e-865c-23c4168f9014.webp" width="24px" height="24px" alt=""><span class="ps-2">Common Bathroom</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-1f0634e7-70aa-477d-afa0-a40fbed0ca86.webp" width="24px" height="24px" alt=""><span class="ps-2">Air Conditioned</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-60a75872-59d4-46b5-aeb4-2e02da32202a.webp" width="20px" height="20px" alt=""><span class="ps-2">Food Faculties</span></p>
+                        <p class="card-text"><img src="https://campmonk.s3.ap-south-1.amazonaws.com/user/large-ea5e8499-ba3e-4c9e-9044-bca75f669aed.webp" width="24px" height="24px" alt=""><span class="ps-2">Camp Fire</span></p>
+                       
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="card-title">Trip Calculator</h2>
+                        <div class="calc">
+                            <form action="show.html" method="post" novalidate class="mb-3 needs-validation">
+                                <div class="input-group date" >
+                                    <input type="text" id="from" name="checkin" placeholder="Check-in" class="form-control" required/>
+                                    <span class="input-group-append">
+                                        <span class="input-group-text bg-white d-block">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </span>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Choose Check-in
+                                    </div>
+                                </div> 
+
+                                <div class="mt-2 input-group date" >
+                                    <input type="text" id="to" name="checkout" placeholder="Check-Out" class="form-control"  required/>
+                                    <span class="input-group-append">
+                                        <span class="input-group-text bg-white d-block">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                    </span>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Choose Check-Out
+                                    </div>
+                                </div>
+                                   <div class="input-group mt-2">
+                                    <input type="number"  onchange="ChooseContact(this)" id="members" name="members" placeholder="total_members" class="form-control" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Choose Total-members
+                                    </div>
+                                   </div>
+                                   <div class="input-group mt-2">
+                                    {%for campgroundview in campgroundview %}
+                                    <!-- <input type="number" id="price" name="price" value='{{campgroundview.price}}' class="form-control"> -->
+                                    <label for="price" class="input-group">Price/PerDay($) : </label>
+                                    <p class="input-group mt-2 text-primary" id="price">{{campgroundview.price}}</p>
+                                    {%endfor%}
+                                   </div>
+
+                                   <div class="input-group mt-2">
+                                    <input class="form-control" readonly id="totaldays" placeholder="total-days">
+                                   <input class="form-control" readonly id="totalrooms" placeholder="total-rooms">
+                                   <input class="form-control" readonly id="grandtotal" placeholder="Total-Price">
+
+                                   </div>
+                                   
+                            </form>
+
+                            <script>
+                                //var roomPrice = 200;
+                                var roomPrice = Number(document.getElementById("price").innerText);
+                                console.log("pricetype,price",typeof(roomPrice),roomPrice)
+                                // bootstrap datepicker configuration 
+                                $(document).ready(function(){
+                                    $( "#from, #to" ).datepicker({
+                                        defaultDate: "+0w",
+                                        changeMonth: false,
+                                        numberOfMonths: 1,
+                                        dateFormat: 'dd-mm-yy',
+                                        minDate: '01-10-2016',
+                                        maxDate: '31-10-2016'
+                                    });
+                                });
+                                
+                                function ChooseContact(data) {
+                                    var totalrooms = data.value;
+                                    document.getElementById ("totalrooms").value = (Number(totalrooms));
+                                    console.log("totalrooms",totalrooms)
+                                }
+                                
+                                
+                                function calculateDuration() {
+                                    var diff = 0;
+                                    if(startDate !="" && endDate !=""){
+                                        var startDate = new Date($('#from').val());
+                                        var endDate = new Date($('#to').val());
+                                        diff = endDate - startDate;
+                                        console.log(startDate,endDate)
+                                    }
+                                
+                                    if(diff==0){
+                                        $("#totaldays").val( "1" );
+                                        $("#grandtotal").val("").css("color","black");
+                                    }
+                                    if(diff>1){
+                                        $("#totaldays").val( (diff / 86400000) +1)
+                                        $("#grandtotal").val("").css("color","black");
+                                    }
+                                    if(diff<0){
+                                        $("#totaldays").val( (diff / 86400000) -1);
+                                        $("#grandtotal").val("Error in dates...").css("color","red");
+                                    }
+                                    return;
+                                }
+                                
+                                function grandTotal(){
+                                    calculateDuration();
+                                    var days = $("#totaldays").val();
+                                    var rooms = $("#totalrooms").val();
+                                   console.log("rooms",rooms)
+                                    if( days != "" && parseInt(days) >0 ){
+                                        if( rooms != "" ){
+                                            var total = parseInt(days) * parseInt(rooms) * roomPrice;
+                                            
+                                            $("#grandtotal").val(total.toFixed(2)).css("color","black");
+                                        }else{
+                                            $("#grandtotal").val("").css("color","black");
+                                        }
+                                    }
+                                    console.log(days,rooms,roomPrice,total)
+                                }
+                                
+                                $("#members, #from, #to").on("change",function(){
+                                    grandTotal();
+                                    
+                                    $(".datepicker").hide();
+                                });
+                              </script>  
+                        </div>
+
+                      
+                       
+                </div>
+           </div>
+
+        </div>
+  
+    
+             
+   <div class="col-6">
+            <div id='map' ></div>
+                  
+<!-- <div id='map' style='width: 400px; height: 300px;'></div> -->
+<!-- {%for campgroundview in campgroundview %} -->
+<!-- <center><div class="mt-4 btn btn-primary lg">View REVIEW's of {{campgroundview.title}}</div></center> -->
+           
+           <!-- if(currentUser) -->
+          
+            <div class="me-5">
+                <form action="/campgrounds/{{campgroundview.id}}/reviews" method="POST" novalidate class="mb-3 needs-validation">
+                    <h2 class="text-danger">Leave a Review</h2>
+                    <div class="mb-3">
+                        <!-- <label class="form-label" for="FeedbackUser">Feedback User</label> -->
+                        <input class="form-control" type="text" id="FeedbackUser" placeholder="Feedback User" name="FeedbackUser" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Fill The User Name
+                        </div>
+                    </div> 
+                   <div class="mb-3">
+                    <fieldset class="starability-basic">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="reviewrating" value="1" checked
+                            aria-label="No rating." required/>
+                        <input type="radio" id="first-rate1" name="reviewrating" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="reviewrating" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="reviewrating" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="reviewrating" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="reviewrating" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                   
+                   </div>
+                    <div class="mb-3">
+                        <!-- <label class="form-label" for="body">Review Text</label> -->
+                        <textarea class="form-control" name="reviewbody" id="body" cols="30" rows="3" placeholder="Review Text" required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Valid Review Description
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button class="btn btn-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M7.823.177L4.927 3.073a.25.25 0 00.177.427H7.25v5.75a.75.75 0 001.5 0V3.5h2.146a.25.25 0 00.177-.427L8.177.177a.25.25 0 00-.354 0zM3.75 6.5a.25.25 0 00-.25.25v6.5c0 .138.112.25.25.25h8.5a.25.25 0 00.25-.25v-6.5a.25.25 0 00-.25-.25h-1a.75.75 0 010-1.5h1c.966 0 1.75.784 1.75 1.75v6.5A1.75 1.75 0 0112.25 15h-8.5A1.75 1.75 0 012 13.25v-6.5C2 5.784 2.784 5 3.75 5h1a.75.75 0 110 1.5h-1z">
+                                </path></svg> Submit</button>
+                    </div>
+                   </form>
+                
+                <!-- {%endfor%} -->
+    
+            </div>
+            <div class="mt-5 me-5">
+            {% for review in reviewview %}
+            <div class="card mb-3 ">
+                <div class="card-body">
+                   <div class="mb-3">
+                   
+                    <h5 class="card-title text-primary"> {{review.feedbackuser}}</h5>
+                    <p class="starability-result" data-rating="{{review.rating}}">
+                        Rated: {{ review.rating }} stars
+                    </p>
+                   
+                    <p class="card-text">Review:  {{review.reviewbody}}</p>
+                    <!-- if( currentUser && review.author.equals(currentUser._id))   -->
+                    <!-- <form action="/campgrounds/{{campgroundview.id}}/reviews/{{review.id}}" method="POST">
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form> -->
+                    {%for campgroundview in campgroundview %}
+                    <a class="card-link btn btn-danger" href="/campground/{{campgroundview.id}}/reviews/{{review.id}}/delete">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M6.5 1.75a.25.25 0 01.25-.25h2.5a.25.25 0 01.25.25V3h-3V1.75zm4.5 0V3h2.25a.75.75 0 010 1.5H2.75a.75.75 0 010-1.5H5V1.75C5 .784 5.784 0 6.75 0h2.5C10.216 0 11 .784 11 1.75zM4.496 6.675a.75.75 0 10-1.492.15l.66 6.6A1.75 1.75 0 005.405 15h5.19c.9 0 1.652-.681 1.741-1.576l.66-6.6a.75.75 0 00-1.492-.149l-.66 6.6a.25.25 0 01-.249.225h-5.19a.25.25 0 01-.249-.225l-.66-6.6z">
+                        </path></svg> Delete</a>
+                    {%endfor%}
+                </div>
+                </div>
+                
+            </div>
+            {%endfor%}
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+
+{%include "footer.html"%}
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!-- <script src="{{ url_for('static', filename='showpagemap.js') }}"></script> -->
+<script src="{{ url_for('static', filename='validate.js') }}"></script>
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script>
+</body>
+</html>
+
+<script>
+    var coordinates = '{{geo.features[0].geometry.coordinates}}';
+    console.log(typeof coordinates);
+    
+    cd = coordinates.replace(/\[|\]/g,'').split(',')
+    var coordinate = []  
+    for(i = 0; i < cd.length; i++) {
+        temp = cd[i].replace(/&#39;/g, "").split(',')
+    //   result = x.map(s => s.slice(0,4));
+        console.log(temp)
+        coordinate.push(parseFloat(temp));
+    }
+    console.log(typeof coordinate);
+    console.log(coordinate);
+
+	// TO MAKE THE MAP APPEAR YOU MUST
+	// ADD YOUR ACCESS TOKEN FROM
+	// https://account.mapbox.com
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic2l2YXNhdGhpdmVsIiwiYSI6ImNsN2VteWlmcTAxeWkzdm1qcWc3OHV2YzUifQ.dm2a4GX3Z_Q73bJL_K-o1g';
+const map = new mapboxgl.Map({
+container: 'map',
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+style: 'mapbox://styles/mapbox/streets-v11',
+center: coordinate,
+zoom: 8
+});
+map.addControl(new mapboxgl.NavigationControl());
+// Create a default Marker and add it to the map.
+const marker1 = new mapboxgl.Marker()
+.setLngLat(coordinate)
+.addTo(map);
+ 
+
+
+
+
+     
+    
+</script>

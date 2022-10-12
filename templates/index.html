@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}">
+
+
+    <!-- Font Awesome -->
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css"
+rel="stylesheet"
+/>
+  </head>
+<body>
+    {%include "navbar.html"%}
+    
+    <div class ='map' id="map"></div>
+    <!-- {{campgroundview}} -->
+    <!-- *****
+    {{geo}}<br>
+    +++++
+    {{geo.features[0]}}<br>
+   -----
+   {{geo.features[0]}}<br>
+   -----
+   {{geo.features[0].properties.title}}<br>
+   -----
+   {{geo.features[0].geometry.coordinates}}<br> -->
+
+    <div class="container">
+        <h1>All Campgrounds</h1>
+        {%for campground in campgrounds %}
+    <div class="row">
+      <div class="col">
+        <div class="card p-5 mt-3 mx-auto shadow" style="width: 50rem;">
+          <img src="{{url_for('static',filename = 'uploads/'+ campground.image)}}" height="300" width="300" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title text-danger ">{{campground.title}}</h5>
+            <p class="card-text">{{campground.description}}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <!-- <li class="list-group-item">${{campground.price}}/Per Day</li> -->
+            <!-- <li class="list-group-item">{{campground.email}}</li>
+            <li class="list-group-item">{{campground.mobile}}</li> -->
+            <li class="list-group-item "><span class = "text-primary">Location : </span>{{campground.location}}</li>
+
+            
+          </ul>
+          <div class="card-body">
+            <div class="card-body">
+              <center><a href="/view/{{campground.id}}" class="btn btn-secondary btn-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                <path fill-rule="evenodd" d="M2.75 2.5h10.5a.25.25 0 01.25.25v10.5a.25.25 0 01-.25.25H2.75a.25.25 0 01-.25-.25V2.75a.25.25 0 01.25-.25zM13.25 1H2.75A1.75 1.75 0 001 2.75v10.5c0 .966.784 1.75 1.75 1.75h10.5A1.75 1.75 0 0015 13.25V2.75A1.75 1.75 0 0013.25 1zm-1.47 7.53a.75.75 0 000-1.06L8.53 4.22a.75.75 0 00-1.06 1.06l1.97 1.97H4.75a.75.75 0 000 1.5h4.69l-1.97 1.97a.75.75 0 101.06 1.06l3.25-3.25z">
+                </path></svg> VIEW  {{campground.title}}</a></center>
+             
+            
+            </div>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+       
+    </div>
+   
+    
+    
+    {%include "footer.html"%}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!-- <script src="{{ url_for('static', filename='mapc.js') }}"></script> -->
+<!-- MDB -->
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.js"
+></script>
+</body>
+</html>
+
+
+<script>
+
+  
+
+  mapboxgl.accessToken = 'pk.eyJ1Ijoic2l2YXNhdGhpdmVsIiwiYSI6ImNsN2VteWlmcTAxeWkzdm1qcWc3OHV2YzUifQ.dm2a4GX3Z_Q73bJL_K-o1g';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/dark-v10',
+        center: [78.962883, 20.593683],
+        zoom: 3
+    });
+    map.addControl(new mapboxgl.NavigationControl());
+    
+map.on('load', function () {
+    // Add a new source from our GeoJSON data and
+    // set the 'cluster' option to true. GL-JS will
+    // add the point_count property to your source data.
+    map.addSource('map', {
+        type: 'geojson',
+        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+        data: 'http://127.0.0.1:8887/map.geojson',
+        cluster: true,
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+    map.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'map',
+        filter: ['has', 'point_count'],
+        paint: {
+            // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+            // with three steps to implement three types of circles:
+            //   * Blue, 20px circles when point count is less than 100
+            //   * Yellow, 30px circles when point count is between 100 and 750
+            //   * Pink, 40px circles when point count is greater than or equal to 750
+            'circle-color': [
+                'step',
+                ['get', 'point_count'],
+                '#00BCD4',
+                2,
+                '#943fb5',
+                5,
+                '#3F51B5',
+                9,
+                '#ed5215'
+            ],
+            'circle-radius': [
+                'step',
+                ['get', 'point_count'],
+                15,
+                10,
+                20,
+                30,
+                25
+            ]
+        }
+    });
+
+    map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source:'map',
+        filter: ['has', 'point_count'],
+        layout: {
+            'text-field': '{point_count_abbreviated}',
+            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            'text-size': 12
+        }
+    });
+
+    map.addLayer({
+        id: 'unclustered-point',
+        type: 'circle',
+        source: 'map',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+            'circle-color': '#11b4da',
+            'circle-radius': 4,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#fff'
+        }
+    });
+
+    // inspect a cluster on click
+    map.on('click', 'clusters', function (e) {
+        const features = map.queryRenderedFeatures(e.point, {
+            layers: ['clusters']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('map').getClusterExpansionZoom(
+            clusterId,
+            function (err, zoom) {
+                if (err) return;
+
+                map.easeTo({
+                    center: features[0].geometry.coordinates,
+                    zoom: zoom
+                });
+            }
+        );
+    });
+
+    // When a click event occurs on a feature in
+    // the unclustered-point layer, open a popup at
+    // the location of the feature, with
+    // description HTML from its properties.
+    map.on('click', 'unclustered-point', function (e) {
+        const title = e.features[0].properties.title;
+        const coordinates = e.features[0].geometry.coordinates.slice();
+
+        // Ensure that if the map is zoomed out such that
+        // multiple copies of the feature are visible, the
+        // popup appears over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(`Location : ${title} `)
+            .addTo(map);
+    });
+
+    map.on('mouseenter', 'clusters', function () {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters', function () {
+        map.getCanvas().style.cursor = '';
+    });
+});
+</script>
